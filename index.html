@@ -3,158 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tra cứu số báo danh</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<title>Tra cứu số báo danh | THPT Thạch Bàn</title>
+<link rel="icon" type="image/png" href="https://c3thachban.edu.vn/images/logo-tb.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --green:#2E7D32;
-  --green-light:#E8F5E9;
-  --green-dark:#1B5E20;
+    --green:#2E7D32;
+    --green-dark:#1B5E20;
+    --green-light:#E8F5E9;
 }
+
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Inter',sans-serif;
-  background:linear-gradient(135deg,#E8F5E9,#ffffff);
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#f1fff3,#ffffff);
+    overflow:hidden;
+    position:relative;
 }
 
-.container{
-  max-width:700px;
-  width:100%;
+/* animated background glow */
+.bg-glow{
+    position:absolute;
+    width:700px;
+    height:700px;
+    background:radial-gradient(circle,rgba(46,125,50,0.18),transparent 70%);
+    top:-200px;
+    right:-200px;
+    animation:float 8s ease-in-out infinite alternate;
 }
 
-h1{
-  font-family:'Outfit',sans-serif;
-  color:var(--green-dark);
-  margin-bottom:10px;
+@keyframes float{
+    from{transform:translateY(0);}
+    to{transform:translateY(60px);}
 }
 
+/* main container */
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+    padding:40px;
+}
+
+/* left content */
+.left h1{
+    font-family:'Outfit',sans-serif;
+    font-size:48px;
+    font-weight:800;
+    background:linear-gradient(45deg,var(--green),#66BB6A,var(--green-dark));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:20px;
+}
+
+.left p{
+    color:#555;
+    font-size:18px;
+    line-height:1.6;
+}
+
+/* right card */
 .card{
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.1);
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(25px);
+    border-radius:30px;
+    padding:50px 40px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.15);
+    text-align:center;
+    animation:fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(50px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.logo{
+    width:90px;
+    margin-bottom:20px;
+    transition:0.4s;
+}
+
+.logo:hover{
+    transform:scale(1.1) rotate(6deg);
+}
+
+.card h2{
+    font-family:'Outfit',sans-serif;
+    font-weight:700;
+    margin-bottom:15px;
+    color:var(--green-dark);
+}
+
+.card p{
+    font-size:14px;
+    color:#666;
+    margin-bottom:25px;
 }
 
 input{
-  width:100%;
-  padding:15px;
-  border-radius:15px;
-  border:2px solid #ddd;
-  margin-bottom:20px;
+    width:100%;
+    padding:16px;
+    border-radius:16px;
+    border:2px solid rgba(0,0,0,0.1);
+    font-size:15px;
+    margin-bottom:20px;
+    transition:0.3s;
 }
 
+input:focus{
+    border-color:var(--green);
+    background:white;
+}
+
+/* glowing button */
 button{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:40px;
-  background:var(--green);
-  color:white;
-  cursor:pointer;
+    width:100%;
+    padding:16px;
+    border-radius:40px;
+    border:none;
+    font-weight:600;
+    font-size:15px;
+    color:white;
+    cursor:pointer;
+    background:linear-gradient(45deg,var(--green),#66BB6A);
+    box-shadow:0 10px 30px rgba(46,125,50,0.4);
+    transition:0.3s;
 }
 
-.result{
-  margin-top:25px;
-  display:none;
-  padding:20px;
-  border-radius:15px;
-  background:var(--green-light);
+button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 40px rgba(46,125,50,0.6);
 }
 
-.result button{
-  margin-top:10px;
-  background:var(--green-dark);
+button:disabled{
+    opacity:0.6;
+}
+
+/* spinner */
+.spinner{
+    width:22px;
+    height:22px;
+    border:3px solid rgba(255,255,255,0.3);
+    border-top:3px solid white;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+    display:none;
+    margin:15px auto 0;
+}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* toast */
+.toast{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    background:var(--green-dark);
+    color:white;
+    padding:15px 25px;
+    border-radius:15px;
+    opacity:0;
+    transform:translateY(30px);
+    transition:0.4s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* design credit advanced shimmer */
+.credit{
+    position:fixed;
+    bottom:20px;
+    right:30px;
+    font-family:'Outfit',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    color:transparent;
+    background:linear-gradient(90deg,var(--green),#a5d6a7,var(--green));
+    background-size:200% 100%;
+    -webkit-background-clip:text;
+    animation:shimmer 4s linear infinite;
+}
+
+@keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+}
+
+/* responsive */
+@media(max-width:900px){
+    .wrapper{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+    .left h1{
+        font-size:34px;
+    }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Tra cứu số báo danh</h1>
+<div class="bg-glow"></div>
 
-  <div class="card">
-    <input type="text" id="keyword" placeholder="Nhập họ tên học sinh">
-    <button onclick="search()">Tra cứu</button>
+<div class="wrapper">
 
-    <div class="result" id="resultBox"></div>
-  </div>
+    <div class="left">
+        <h1>Hệ thống tra cứu</h1>
+        <p>
+            Tra cứu số báo danh nhanh chóng, chính xác.
+            Dữ liệu được đồng bộ trực tiếp từ hệ thống trường.
+        </p>
+    </div>
+
+    <div class="card">
+        <img src="https://c3thachban.edu.vn/images/logo-tb.png" class="logo">
+        <h2>Tra cứu số báo danh</h2>
+        <p>Nhập họ tên học sinh</p>
+
+        <input type="text" id="keyword" placeholder="Ví dụ: Lê Khánh Duy">
+
+        <button id="btn" onclick="search()">Tra cứu</button>
+
+        <div class="spinner" id="spinner"></div>
+    </div>
+
 </div>
+
+<div class="toast" id="toast"></div>
+<div class="credit">Design by KhanhDuy</div>
 
 <script>
 async function search(){
-  const keyword=document.getElementById("keyword").value.trim();
-  const resultBox=document.getElementById("resultBox");
+    const keyword=document.getElementById("keyword").value;
+    const btn=document.getElementById("btn");
+    const spinner=document.getElementById("spinner");
 
-  if(!keyword){
-    alert("Vui lòng nhập họ tên");
-    return;
-  }
+    if(!keyword){
+        showToast("Vui lòng nhập họ tên");
+        return;
+    }
 
-  resultBox.style.display="none";
+    btn.disabled=true;
+    spinner.style.display="block";
 
-  const res=await fetch("/api/tracuu",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({keyword})
-  });
+    try{
+        const res=await fetch("/api/tracuu",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({keyword})
+        });
 
-  const data=await res.json();
+        const data=await res.json();
 
-  if(!data.success){
-    alert(data.error);
-    return;
-  }
+        if(data.success){
+            showToast("Tìm thấy ID: "+data.id);
+            setTimeout(()=>window.open(data.url,"_blank"),800);
+        }else{
+            showToast(data.error);
+        }
 
-  // 🔹 Nếu nhiều người trùng tên
-  if(data.multiple){
-    let html="<h3>Chọn đúng học sinh:</h3>";
-    data.list.forEach(id=>{
-      html+=`<button onclick="loadDetail('${id}')">Xem ID ${id}</button><br><br>`;
-    });
-    resultBox.innerHTML=html;
-    resultBox.style.display="block";
-    return;
-  }
+    }catch{
+        showToast("Lỗi kết nối");
+    }
 
-  // 🔹 Nếu 1 người
-  showDetail(data.data);
+    btn.disabled=false;
+    spinner.style.display="none";
 }
 
-async function loadDetail(id){
-  const res=await fetch("/api/tracuu",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({keyword:id})
-  });
-
-  const data=await res.json();
-  if(data.success){
-    showDetail(data.data);
-  }
-}
-
-function showDetail(d){
-  const resultBox=document.getElementById("resultBox");
-  resultBox.innerHTML=`
-    <h3>Kết quả chi tiết</h3>
-    <p><b>Họ tên:</b> ${d.name}</p>
-    <p><b>Số báo danh:</b> ${d.sbd}</p>
-    <p><b>Lớp:</b> ${d.lop}</p>
-    <p><b>Ngày sinh:</b> ${d.ngaysinh}</p>
-    <hr>
-    <p><b>Phòng:</b> ${d.phong}</p>
-    <p><b>STT:</b> ${d.stt}</p>
-  `;
-  resultBox.style.display="block";
+function showToast(msg){
+    const toast=document.getElementById("toast");
+    toast.innerText=msg;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),3000);
 }
 </script>
 
 </body>
 </html>
+
