@@ -2,62 +2,238 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Tra cứu số báo danh</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tra cứu số báo danh | THPT Thạch Bàn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-body{
-    font-family:Arial;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    background:#f5f5f5;
+:root {
+    --green-main: #2E7D32;
+    --green-dark: #1B5E20;
+    --green-light: #E8F5E9;
 }
-.box{
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 20px 50px rgba(0,0,0,0.1);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-input{
-    padding:12px;
-    width:250px;
+
+body {
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #E8F5E9, #ffffff);
+    overflow: hidden;
 }
-button{
-    padding:12px 20px;
-    background:#2E7D32;
-    color:white;
-    border:none;
-    cursor:pointer;
+
+.bg-circle {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(46,125,50,0.15), transparent 70%);
+    top: -150px;
+    right: -150px;
+    animation: float 6s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(40px); }
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    padding: 50px 40px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    text-align: center;
+    z-index: 2;
+}
+
+.logo {
+    width: 90px;
+    margin-bottom: 20px;
+    transition: 0.4s;
+}
+
+.logo:hover {
+    transform: rotate(8deg) scale(1.1);
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+}
+
+p {
+    color: #555;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px solid rgba(0,0,0,0.1);
+    outline: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--green-main);
+    background: white;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 40px;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(45deg, #2E7D32, #66BB6A);
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+    margin: auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--green-dark);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.4s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 500px) {
+    .card {
+        padding: 40px 25px;
+    }
 }
 </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>Tra cứu số báo danh</h2>
-    <input type="text" id="keyword" placeholder="Nhập họ tên">
-    <br><br>
-    <button onclick="search()">Tra cứu</button>
+<div class="bg-circle"></div>
+
+<div class="card">
+    <img src="https://c3thachban.edu.vn/images/logo-tb.png" class="logo">
+    <h1>Tra cứu số báo danh</h1>
+    <p>Nhập họ tên học sinh để tìm ID chính thức</p>
+
+    <div class="input-group">
+        <input type="text" id="keyword" placeholder="Ví dụ: Lê Khánh Duy">
+    </div>
+
+    <button id="btn" onclick="search()">
+        Tra cứu
+    </button>
+
+    <div class="spinner" id="spinner"></div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 async function search() {
     const keyword = document.getElementById("keyword").value;
+    const btn = document.getElementById("btn");
+    const spinner = document.getElementById("spinner");
 
-    const res = await fetch("/api/tracuu", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-        window.open(data.url, "_blank");
-    } else {
-        alert(data.error);
+    if (!keyword) {
+        showToast("Vui lòng nhập họ tên");
+        return;
     }
+
+    btn.disabled = true;
+    spinner.style.display = "block";
+
+    try {
+        const res = await fetch("/api/tracuu", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ keyword })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            showToast("Tìm thấy ID: " + data.id);
+            setTimeout(() => {
+                window.open(data.url, "_blank");
+            }, 800);
+        } else {
+            showToast(data.error);
+        }
+
+    } catch (err) {
+        showToast("Lỗi kết nối");
+    }
+
+    btn.disabled = false;
+    spinner.style.display = "none";
+}
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
 }
 </script>
 
