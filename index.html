@@ -269,8 +269,7 @@ async function search(){
         const data=await res.json();
 
         if(data.success){
-            showToast("Tìm thấy ID: "+data.id);
-            setTimeout(()=>window.open(data.url,"_blank"),800);
+            window.location.href = data.url;
         }else{
             showToast(data.error);
         }
@@ -293,4 +292,5 @@ function showToast(msg){
 
 </body>
 </html>
+
 
