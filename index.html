@@ -5,235 +5,289 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tra cứu số báo danh | THPT Thạch Bàn</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --green-main: #2E7D32;
-    --green-dark: #1B5E20;
-    --green-light: #E8F5E9;
+:root{
+    --green:#2E7D32;
+    --green-dark:#1B5E20;
+    --green-light:#E8F5E9;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#f1fff3,#ffffff);
+    overflow:hidden;
+    position:relative;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #E8F5E9, #ffffff);
-    overflow: hidden;
+/* animated background glow */
+.bg-glow{
+    position:absolute;
+    width:700px;
+    height:700px;
+    background:radial-gradient(circle,rgba(46,125,50,0.18),transparent 70%);
+    top:-200px;
+    right:-200px;
+    animation:float 8s ease-in-out infinite alternate;
 }
 
-.bg-circle {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(46,125,50,0.15), transparent 70%);
-    top: -150px;
-    right: -150px;
-    animation: float 6s ease-in-out infinite alternate;
+@keyframes float{
+    from{transform:translateY(0);}
+    to{transform:translateY(60px);}
 }
 
-@keyframes float {
-    from { transform: translateY(0); }
-    to { transform: translateY(40px); }
+/* main container */
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+    padding:40px;
 }
 
-.card {
-    position: relative;
-    width: 100%;
-    max-width: 480px;
-    padding: 50px 40px;
-    border-radius: 30px;
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-    text-align: center;
-    z-index: 2;
+/* left content */
+.left h1{
+    font-family:'Outfit',sans-serif;
+    font-size:48px;
+    font-weight:800;
+    background:linear-gradient(45deg,var(--green),#66BB6A,var(--green-dark));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:20px;
 }
 
-.logo {
-    width: 90px;
-    margin-bottom: 20px;
-    transition: 0.4s;
+.left p{
+    color:#555;
+    font-size:18px;
+    line-height:1.6;
 }
 
-.logo:hover {
-    transform: rotate(8deg) scale(1.1);
+/* right card */
+.card{
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(25px);
+    border-radius:30px;
+    padding:50px 40px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.15);
+    text-align:center;
+    animation:fadeUp 1s ease forwards;
 }
 
-h1 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--green-dark);
-    margin-bottom: 10px;
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(50px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
-p {
-    color: #555;
-    margin-bottom: 30px;
-    font-size: 14px;
+.logo{
+    width:90px;
+    margin-bottom:20px;
+    transition:0.4s;
 }
 
-.input-group {
-    position: relative;
-    margin-bottom: 25px;
+.logo:hover{
+    transform:scale(1.1) rotate(6deg);
 }
 
-input {
-    width: 100%;
-    padding: 15px;
-    border-radius: 15px;
-    border: 2px solid rgba(0,0,0,0.1);
-    outline: none;
-    font-size: 15px;
-    transition: 0.3s;
+.card h2{
+    font-family:'Outfit',sans-serif;
+    font-weight:700;
+    margin-bottom:15px;
+    color:var(--green-dark);
 }
 
-input:focus {
-    border-color: var(--green-main);
-    background: white;
+.card p{
+    font-size:14px;
+    color:#666;
+    margin-bottom:25px;
 }
 
-button {
-    width: 100%;
-    padding: 15px;
-    border-radius: 40px;
-    border: none;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    color: white;
-    background: linear-gradient(45deg, #2E7D32, #66BB6A);
-    transition: 0.3s;
+input{
+    width:100%;
+    padding:16px;
+    border-radius:16px;
+    border:2px solid rgba(0,0,0,0.1);
+    font-size:15px;
+    margin-bottom:20px;
+    transition:0.3s;
 }
 
-button:hover {
-    transform: translateY(-3px);
+input:focus{
+    border-color:var(--green);
+    background:white;
 }
 
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+/* glowing button */
+button{
+    width:100%;
+    padding:16px;
+    border-radius:40px;
+    border:none;
+    font-weight:600;
+    font-size:15px;
+    color:white;
+    cursor:pointer;
+    background:linear-gradient(45deg,var(--green),#66BB6A);
+    box-shadow:0 10px 30px rgba(46,125,50,0.4);
+    transition:0.3s;
 }
 
-.spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-top: 3px solid white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    display: none;
-    margin: auto;
+button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 40px rgba(46,125,50,0.6);
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+button:disabled{
+    opacity:0.6;
 }
 
-.toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: var(--green-dark);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 12px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 0.4s;
+/* spinner */
+.spinner{
+    width:22px;
+    height:22px;
+    border:3px solid rgba(255,255,255,0.3);
+    border-top:3px solid white;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+    display:none;
+    margin:15px auto 0;
 }
 
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* toast */
+.toast{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    background:var(--green-dark);
+    color:white;
+    padding:15px 25px;
+    border-radius:15px;
+    opacity:0;
+    transform:translateY(30px);
+    transition:0.4s;
 }
 
-@media (max-width: 500px) {
-    .card {
-        padding: 40px 25px;
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* design credit advanced shimmer */
+.credit{
+    position:fixed;
+    bottom:20px;
+    right:30px;
+    font-family:'Outfit',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    color:transparent;
+    background:linear-gradient(90deg,var(--green),#a5d6a7,var(--green));
+    background-size:200% 100%;
+    -webkit-background-clip:text;
+    animation:shimmer 4s linear infinite;
+}
+
+@keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+}
+
+/* responsive */
+@media(max-width:900px){
+    .wrapper{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+    .left h1{
+        font-size:34px;
     }
 }
 </style>
 </head>
 <body>
 
-<div class="bg-circle"></div>
+<div class="bg-glow"></div>
 
-<div class="card">
-    <img src="https://c3thachban.edu.vn/images/logo-tb.png" class="logo">
-    <h1>Tra cứu số báo danh</h1>
-    <p>Nhập họ tên học sinh để tìm ID chính thức</p>
+<div class="wrapper">
 
-    <div class="input-group">
-        <input type="text" id="keyword" placeholder="Ví dụ: Lê Khánh Duy">
+    <div class="left">
+        <h1>Hệ thống tra cứu</h1>
+        <p>
+            Tra cứu số báo danh nhanh chóng, chính xác.
+            Dữ liệu được đồng bộ trực tiếp từ hệ thống trường.
+        </p>
     </div>
 
-    <button id="btn" onclick="search()">
-        Tra cứu
-    </button>
+    <div class="card">
+        <img src="https://c3thachban.edu.vn/images/logo-tb.png" class="logo">
+        <h2>Tra cứu số báo danh</h2>
+        <p>Nhập họ tên học sinh</p>
 
-    <div class="spinner" id="spinner"></div>
+        <input type="text" id="keyword" placeholder="Ví dụ: Lê Khánh Duy">
+
+        <button id="btn" onclick="search()">Tra cứu</button>
+
+        <div class="spinner" id="spinner"></div>
+    </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="credit">Design by KhanhDuy</div>
 
 <script>
-async function search() {
-    const keyword = document.getElementById("keyword").value;
-    const btn = document.getElementById("btn");
-    const spinner = document.getElementById("spinner");
+async function search(){
+    const keyword=document.getElementById("keyword").value;
+    const btn=document.getElementById("btn");
+    const spinner=document.getElementById("spinner");
 
-    if (!keyword) {
+    if(!keyword){
         showToast("Vui lòng nhập họ tên");
         return;
     }
 
-    btn.disabled = true;
-    spinner.style.display = "block";
+    btn.disabled=true;
+    spinner.style.display="block";
 
-    try {
-        const res = await fetch("/api/tracuu", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ keyword })
+    try{
+        const res=await fetch("/api/tracuu",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({keyword})
         });
 
-        const data = await res.json();
+        const data=await res.json();
 
-        if (data.success) {
-            showToast("Tìm thấy ID: " + data.id);
-            setTimeout(() => {
-                window.open(data.url, "_blank");
-            }, 800);
-        } else {
+        if(data.success){
+            showToast("Tìm thấy ID: "+data.id);
+            setTimeout(()=>window.open(data.url,"_blank"),800);
+        }else{
             showToast(data.error);
         }
 
-    } catch (err) {
+    }catch{
         showToast("Lỗi kết nối");
     }
 
-    btn.disabled = false;
-    spinner.style.display = "none";
+    btn.disabled=false;
+    spinner.style.display="none";
 }
 
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    toast.innerText = message;
+function showToast(msg){
+    const toast=document.getElementById("toast");
+    toast.innerText=msg;
     toast.classList.add("show");
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 3000);
+    setTimeout(()=>toast.classList.remove("show"),3000);
 }
 </script>
 
